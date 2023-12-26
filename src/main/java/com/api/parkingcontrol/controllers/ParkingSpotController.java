@@ -4,6 +4,7 @@ import com.api.parkingcontrol.dtos.ParkingSpotDto;
 import com.api.parkingcontrol.models.ParkingSpotModel;
 import com.api.parkingcontrol.services.ParkingSpotService;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,5 +60,24 @@ public class ParkingSpotController {
         return ResponseEntity.status(HttpStatus.OK).body("Parking Spot deleted successfully.");
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateParkingSpot(@PathVariable(value = "id") UUID id, @RequestBody @Valid ParkingSpotDto parkingSpotDto) {
+        Optional<ParkingSpotModel> parkingSpotModelOptional = parkingSpotService.findById(id);
+        if (!parkingSpotModelOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Parking Spot not found.");
+        }
+        
+        var parkingSpotModel = parkingSpotModelOptional.get();
+        parkingSpotModel.setParkingSpotNumber(parkingSpotDto.parkingSpotNumber());
+        parkingSpotModel.setApartment(parkingSpotDto.apartment());
+        parkingSpotModel.setBlock(parkingSpotDto.block());
+        parkingSpotModel.setModelCar(parkingSpotDto.modelCar());
+        parkingSpotModel.setBrandCar(parkingSpotDto.brandCar());
+        parkingSpotModel.setColorCar(parkingSpotDto.colorCar());
+        parkingSpotModel.setLicensePlateCar(parkingSpotDto.licensePlateCar());
+        parkingSpotModel.setResponsibleName(parkingSpotDto.responsibleName());
 
+
+        return ResponseEntity.status(HttpStatus.OK).body(parkingSpotService.save(parkingSpotModel));
+    }
 }
