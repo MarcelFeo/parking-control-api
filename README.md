@@ -8,7 +8,6 @@ This project is an API built using **Java, Java Spring.**
 ## Table of Contents
 
 - [Installation](#installation)
-- [Configuration](#configuration)
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
 
